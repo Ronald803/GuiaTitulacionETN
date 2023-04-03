@@ -4,16 +4,16 @@ import { useState } from "react";
 function LoginForm() {
   const [email, SetEmail] = useState('');
   const [password, SetPassword] = useState('');
-  const URI = 'https://api-guia-titulacion/';
+  const URI = 'https://guia-titulacion-etn-api.vercel.app/api';
   const handleSubmit = function () {
-    console.log(email);
-    postData(URI, { email: email, password: password}).then((data) => {
+    // console.log(JSON.parse({ email: email, password: password}));
+    postData(`${URI}/login`, { email: email, password: password}).then((data) => {
       console.log(data); 
     });
   };
 
   async function postData(url="", data = {}){
-    const response = await fetch(url,{method: "POST", body: JSON.stringify(data)});
+    const response = await fetch(url,{method: 'POST', headers: {"Content-Type": "application/json"}, body: JSON.stringify(data)});
     return response.json();
   }
 
