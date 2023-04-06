@@ -1,19 +1,30 @@
 import { Box, Typography, TextField, Button, Link } from "@mui/material/";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  const [email, SetEmail] = useState('');
-  const [password, SetPassword] = useState('');
-  const URI = 'https://guia-titulacion-etn-api.vercel.app/api';
+  const [email, SetEmail] = useState("");
+  const [password, SetPassword] = useState("");
+  const navigate = useNavigate();
+  const URI = "https://guia-titulacion-etn-api.vercel.app/api";
   const handleSubmit = function () {
-    // console.log(JSON.parse({ email: email, password: password}));
-    postData(`${URI}/login`, { email: email, password: password}).then((data) => {
-      console.log(data); 
-    });
+    postData(`${URI}/login`, { email: email, password: password }).then(
+      (data) => {
+        if (data.msg === "Logged correctly") {
+          navigate("/");
+        } else {
+          alert("something went wrong, try again");
+        }
+      }
+    );
   };
 
-  async function postData(url="", data = {}){
-    const response = await fetch(url,{method: 'POST', headers: {"Content-Type": "application/json"}, body: JSON.stringify(data)});
+  async function postData(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     return response.json();
   }
 
@@ -38,7 +49,9 @@ function LoginForm() {
         variant="outlined"
         size="small"
         value={email}
-        onChange={(e) => {SetEmail(e.target.value)}}
+        onChange={(e) => {
+          SetEmail(e.target.value);
+        }}
       />
       <TextField
         required
@@ -49,7 +62,9 @@ function LoginForm() {
         size="small"
         type="password"
         value={password}
-        onChange={(e) => {SetPassword(e.target.value)}}
+        onChange={(e) => {
+          SetPassword(e.target.value);
+        }}
       />
       <Box
         sx={{
@@ -59,7 +74,11 @@ function LoginForm() {
           alignItems: "center",
         }}
       >
-        <Button onClick={() => handleSubmit()} variant="contained" sx={{ textTransform: "none", width: 150 }}>
+        <Button
+          onClick={() => handleSubmit()}
+          variant="contained"
+          sx={{ textTransform: "none", width: 150 }}
+        >
           Sign in
         </Button>
         <Typography variant="body2">
